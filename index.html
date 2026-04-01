@@ -1,1 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property Comparison: Alconbury vs Longstanton</title>
+<style>
+  :root {
+    --navy: #1a2744;
+    --teal: #2a9d8f;
+    --coral: #e76f51;
+    --gold: #e9c46a;
+    --cream: #faf9f6;
+    --light-grey: #f0efeb;
+    --text: #2c2c2c;
+    --muted: #6b7280;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: var(--text); background: var(--cream); line-height: 1.6; }
 
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #2d4a7a 100%);
+    color: white; padding: 60px 40px; text-align: center;
+  }
+  .hero h1 { font-size: 2.4rem; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.5px; }
+  .hero p { font-size: 1.1rem; opacity: 0.85; max-width: 700px; margin: 0 auto; }
+  .hero .subtitle { margin-top: 8px; font-size: 0.95rem; opacity: 0.6; }
+
+  /* Container */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+  /* Section */
+  .section { padding: 50px 0; }
+  .section-title {
+    font-size: 1.6rem; font-weight: 700; color: var(--navy);
+    margin-bottom: 30px; padding-bottom: 12px;
+    border-bottom: 3px solid var(--teal); display: inline-block;
+  }
+
+  /* Cards Grid */
+  .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .card {
+    background: white; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid #e8e8e8;
+    transition: transform 0.2s;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+  .card-header {
+    padding: 20px 24px; color: white; font-size: 1.15rem; font-weight: 600;
+  }
+  .card-header.alconbury { background: linear-gradient(135deg, var(--teal), #1f7a6f); }
+  .card-header.longstanton { background: linear-gradient(135deg, var(--coral), #c45a3c); }
+  .card-header .price { font-size: 1.6rem; font-weight: 800; margin-top: 4px; }
+  .card-header .addr { font-size: 0.85rem; opacity: 0.85; margin-top: 2px; }
+  .card-body { padding: 24px; }
+
+  /* Spec Grid */
+  .specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px; }
+  .spec { background: var(--light-grey); border-radius: 10px; padding: 14px; text-align: center; }
+  .spec-value { font-size: 1.25rem; font-weight: 700; color: var(--navy); }
+  .spec-label { font-size: 0.75rem; text-transform: uppercase; color: var(--muted); letter-spacing: 0.5px; margin-top: 2px; }
+
+  /* Feature List */
+  .features { list-style: none; }
+  .features li { padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 0.92rem; display: flex; align-items: flex-start; gap: 8px; }
+  .features li:last-child { border-bottom: none; }
+  .features .icon { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; margin-top: 2px; }
+  .icon.green { background: #d1fae5; color: #065f46; }
+  .icon.amber { background: #fef3c7; color: #92400e; }
+  .icon.red { background: #fee2e2; color: #991b1b; }
+
+  /* Comparison Table */
+  table.comparison {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    background: white; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  table.comparison th {
+    background: var(--navy); color: white; padding: 14px 18px;
+    text-align: left; font-weight: 600; font-size: 0.9rem;
+  }
+  table.comparison th:first-child { width: 30%; }
+  table.comparison td {
+    padding: 14px 18px; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem;
+    vertical-align: top;
+  }
+  table.comparison tr:last-child td { border-bottom: none; }
+  table.comparison tr:hover td { background: #f9fafb; }
+  .winner { background: #ecfdf5 !important; font-weight: 600; }
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 12px;
+    font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .badge.green { background: #d1fae5; color: #065f46; }
+  .badge.amber { background: #fef3c7; color: #92400e; }
+  .badge.red { background: #fee2e2; color: #991b1b; }
+  .badge.blue { background: #dbeafe; color: #1e40af; }
+
+  /* Score Card */
+  .score-section { background: var(--navy); color: white; padding: 50px 0; margin-top: 50px; }
+  .score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+  .score-card {
+    background: rgba(255,255,255,0.08); border-radius: 14px; padding: 30px;
+    text-align: center; border: 1px solid rgba(255,255,255,0.1);
+  }
+  .score-card h3 { font-size: 1.2rem; margin-bottom: 6px; }
+  .score-card .location { font-size: 0.85rem; opacity: 0.7; margin-bottom: 20px; }
+  .score-number { font-size: 3.5rem; font-weight: 800; }
+  .score-number.teal { color: var(--teal); }
+  .score-number.coral { color: var(--coral); }
+  .score-out-of { font-size: 0.9rem; opacity: 0.6; }
+  .score-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin: 16px 0; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 4px; }
+  .score-bar-fill.teal { background: var(--teal); }
+  .score-bar-fill.coral { background: var(--coral); }
+  .score-breakdown { text-align: left; margin-top: 20px; }
+  .score-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.85rem; }
+  .score-item:last-child { border: none; }
+  .score-item span:last-child { font-weight: 700; }
+
+  /* Context Box */
+  .context-box {
+    background: white; border-radius: 14px; padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 28px;
+    border-left: 4px solid var(--teal);
+  }
+  .context-box h3 { color: var(--navy); margin-bottom: 10px; font-size: 1.05rem; }
+  .context-box p { font-size: 0.92rem; color: var(--muted); }
+
+  /* Verdict */
+  .verdict {
+    background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+    border: 2px solid var(--teal); border-radius: 14px;
+    padding: 30px; margin-top: 30px;
+  }
+  .verdict h3 { color: var(--navy); font-size: 1.3rem; margin-bottom: 12px; }
+  .verdict p { font-size: 0.95rem; line-height: 1.7; }
+
+  /* Info Panels */
+  .info-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+  .info-panel {
+    background: white; border-radius: 12px; padding: 22px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  }
+  .info-panel h4 { color: var(--navy); font-size: 0.95rem; margin-bottom: 10px; }
+  .info-panel p, .info-panel li { font-size: 0.88rem; color: var(--muted); }
+  .info-panel ul { padding-left: 18px; }
+  .info-panel ul li { margin-bottom: 4px; }
+
+  /* Footer */
+  .footer {
+    text-align: center; padding: 30px; font-size: 0.8rem;
+    color: var(--muted); border-top: 1px solid #e8e8e8; margin-top: 40px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .cards-grid, .score-grid, .info-panels { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 1.6rem; }
+    .specs { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Property Comparison Report</h1>
+  <p>Alconbury Weston vs Longstanton &mdash; A comprehensive analysis for your family's next move</p>
+  <div class="subtitle">Prepared April 2026 &bull; Based on your commute to Liverpool Street &amp; your wife's commute to Farringdon</div>
+</div>
+
+<!-- YOUR SITUATION -->
+<div class="section">
+  <div class="container">
+    <div class="section-title">Your Family Context</div>
+    <div class="context-box">
+      <h3>Current Situation</h3>
+      <p>You're a family of 3 (with a 2-year-old) currently in St Neots, where you already commute via Thameslink to London. You work at Liverpool Street, your wife works at Farringdon (3 days/week), and your child needs nursery. You're looking for a property with good London access, appreciation potential, a decent garden, and strong local schools for the years ahead.</p>
+    </div>
+
+    <!-- Property Overview Cards -->
+    <div class="cards-grid">
+      <!-- Alconbury Card -->
+      <div class="card">
+        <div class="card-header alconbury">
+          The Spinney, Alconbury Weston
+          <div class="price">Offers Over &pound;700,000</div>
+          <div class="addr">Hamerton Road, Alconbury Weston, Huntingdon, PE28</div>
+        </div>
+        <div class="card-body">
+          <div class="specs">
+            <div class="spec"><div class="spec-value">5</div><div class="spec-label">Bedrooms</div></div>
+            <div class="spec"><div class="spec-value">3</div><div class="spec-label">Bathrooms</div></div>
+            <div class="spec"><div class="spec-value">0.66 ac</div><div class="spec-label">Plot Size</div></div>
+            <div class="spec"><div class="spec-value">D</div><div class="spec-label">EPC Rating</div></div>
+            <div class="spec"><div class="spec-value">Band E</div><div class="spec-label">Council Tax</div></div>
+            <div class="spec"><div class="spec-value">1950s</div><div class="spec-label">Year Built</div></div>
+          </div>
+          <ul class="features">
+            <li><span class="icon green">&#10003;</span> 0.66-acre garden wrapping 3 sides of the house with mature trees</li>
+            <li><span class="icon green">&#10003;</span> Freehold, detached, carriage driveway + garage</li>
+            <li><span class="icon green">&#10003;</span> Open-plan kitchen, 3 reception rooms, ground-floor en-suite bedroom</li>
+            <li><span class="icon green">&#10003;</span> Multi-generational living potential</li>
+            <li><span class="icon amber">!</span> 1950s property &mdash; some modernisation may be needed (rewired already)</li>
+            <li><span class="icon amber">!</span> EPC rating D &mdash; insulation improvements likely required</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Longstanton Card -->
+      <div class="card">
+        <div class="card-header longstanton">
+          Mills Lane, Longstanton
+          <div class="price">Offers Over &pound;650,000</div>
+          <div class="addr">Mills Lane, Longstanton, Cambridge, CB24</div>
+        </div>
+        <div class="card-body">
+          <div class="specs">
+            <div class="spec"><div class="spec-value">5/6</div><div class="spec-label">Bedrooms</div></div>
+            <div class="spec"><div class="spec-value">3</div><div class="spec-label">Bathrooms</div></div>
+            <div class="spec"><div class="spec-value">2,217</div><div class="spec-label">Sq Ft</div></div>
+            <div class="spec"><div class="spec-value">C</div><div class="spec-label">EPC Rating</div></div>
+            <div class="spec"><div class="spec-value">TBC</div><div class="spec-label">Council Tax</div></div>
+            <div class="spec"><div class="spec-value">Modern</div><div class="spec-label">Year Built</div></div>
+          </div>
+          <ul class="features">
+            <li><span class="icon green">&#10003;</span> Large rear garden backing onto open fields and woodland</li>
+            <li><span class="icon green">&#10003;</span> Freehold, detached, double garage + large driveway</li>
+            <li><span class="icon green">&#10003;</span> 2,217 sq ft, 9-metre boarded loft, balcony, wood-burning stove</li>
+            <li><span class="icon green">&#10003;</span> No onward chain &mdash; faster completion</li>
+            <li><span class="icon green">&#10003;</span> EPC rating C &mdash; better energy efficiency</li>
+            <li><span class="icon green">&#10003;</span> Flexible ground floor with 2 office spaces</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMMUTE COMPARISON -->
+<div class="section" style="background: var(--light-grey); padding: 50px 0;">
+  <div class="container">
+    <div class="section-title">Commute to London</div>
+
+    <div class="context-box" style="border-left-color: var(--gold); margin-bottom: 24px;">
+      <h3>For Reference: Your Current St Neots Commute</h3>
+      <p>St Neots &rarr; Farringdon: ~1 hour direct via Thameslink. St Neots &rarr; Liverpool Street: ~1h + tube from Kings Cross/Farringdon (~20 min). Your wife already uses Farringdon &ndash; St Neots, so any move further from that line adds commute time for her.</p>
+    </div>
+
+    <table class="comparison">
+      <tr>
+        <th>Commute Factor</th>
+        <th style="color: #5eead4;">Alconbury Weston</th>
+        <th style="color: #fca5a5;">Longstanton</th>
+      </tr>
+      <tr>
+        <td><strong>Nearest Station</strong></td>
+        <td>Huntingdon (~6 miles / 12 min drive)</td>
+        <td>Cambridge North (~25 min by guided bus) or Cambridge (~38 min by bus)</td>
+      </tr>
+      <tr>
+        <td><strong>Your Commute (Liverpool St)</strong></td>
+        <td>Huntingdon &rarr; Kings Cross (~50 min) + tube to Liverpool St (~15 min)<br><strong>Total: ~1h 15min + drive to station</strong></td>
+        <td class="winner">Bus to Cambridge North &rarr; Liverpool St direct (~1h 17min)<br><strong>Total: ~1h 45min door-to-door</strong><br><span class="badge blue">Direct train, no tube needed</span></td>
+      </tr>
+      <tr>
+        <td><strong>Wife's Commute (Farringdon, 3x/week)</strong></td>
+        <td class="winner">Huntingdon &rarr; Farringdon direct via Thameslink (~1h 8min)<br><strong>Total: ~1h 25min door-to-door</strong><br><span class="badge green">Direct, same line as St Neots</span></td>
+        <td>Bus to Cambridge &rarr; Kings Cross (~50 min) + tube to Farringdon (~8 min)<br><strong>Total: ~1h 50min door-to-door</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Train Frequency</strong></td>
+        <td>~2 trains/hour peak to London (Thameslink + LNER)</td>
+        <td>Every 10-20 min from Cambridge to London</td>
+      </tr>
+      <tr>
+        <td><strong>Annual Season Ticket</strong></td>
+        <td>~&pound;7,340/year (Huntingdon &rarr; London Zones 1-6)<br>~&pound;612/month</td>
+        <td>~&pound;5,952&ndash;&pound;6,816/year (Cambridge &rarr; London)<br>~&pound;496&ndash;&pound;568/month<br><span class="badge green">Up to &pound;1,400/yr cheaper</span></td>
+      </tr>
+      <tr>
+        <td><strong>Driving Access</strong></td>
+        <td class="winner">Direct A1(M) access. A14 nearby.<br><span class="badge green">Excellent road links</span></td>
+        <td>2.5 miles to A14, 5 miles to M11</td>
+      </tr>
+      <tr>
+        <td><strong>Combined Family Verdict</strong></td>
+        <td><span class="badge green">Better for your wife</span><br>Thameslink to Farringdon is a huge advantage for someone commuting 3x/week</td>
+        <td><span class="badge blue">Better for you</span><br>Direct to Liverpool Street, but the bus-to-train adds time and complexity</td>
+      </tr>
+    </table>
+
+    <div class="verdict" style="margin-top: 24px; background: linear-gradient(135deg, #ecfdf5, #f0fdf4);">
+      <h3>Commute Winner: Alconbury</h3>
+      <p>Since your wife commutes 3 days per week to Farringdon, the direct Thameslink connection from Huntingdon is a significant advantage &mdash; it's the same line she already uses from St Neots. While Longstanton offers a direct train to Liverpool Street for you, the 25-minute guided bus to the station adds friction. With two commuters, Alconbury's proximity to the Thameslink corridor serves your family better overall, especially as the planned Alconbury Weald railway station would be even closer in the future.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PROPERTY APPRECIATION -->
+<div class="section">
+  <div class="container">
+    <div class="section-title">Property Appreciation Potential</div>
+
+    <table class="comparison">
+      <tr>
+        <th>Factor</th>
+        <th style="color: #5eead4;">Alconbury Weston</th>
+        <th style="color: #fca5a5;">Longstanton</th>
+      </tr>
+      <tr>
+        <td><strong>12-Month Price Change</strong></td>
+        <td>-0.9% (Alconbury Weald area)<br><span class="badge amber">Flat/slight decline</span></td>
+        <td>+1.1% (Longstanton/Northstowe)<br><span class="badge green">Modest growth</span></td>
+      </tr>
+      <tr>
+        <td><strong>5-Year Growth</strong></td>
+        <td>Area avg ~&pound;365k &rarr; reasonable growth</td>
+        <td class="winner">+5.76% over 5 years<br>Avg property: &pound;424k</td>
+      </tr>
+      <tr>
+        <td><strong>10-Year Growth</strong></td>
+        <td>+30.2% over 10 years</td>
+        <td>Cambridge region outperforming national avg</td>
+      </tr>
+      <tr>
+        <td><strong>Major Development</strong></td>
+        <td>Alconbury Weald: 6,500 homes + 8,000 jobs in Enterprise Zone + planned railway station + country park</td>
+        <td class="winner">Northstowe: 10,000 homes new town + Unity Centre (opened 2026) + secondary school + guided busway<br><span class="badge green">Larger, more advanced development</span></td>
+      </tr>
+      <tr>
+        <td><strong>Infrastructure Pipeline</strong></td>
+        <td>Planned Alconbury Weald railway station (backed by mayor, no confirmed date). New link road and hub under construction (2026).</td>
+        <td class="winner">Cambridge South station opening June 2026. Guided Busway already operational. Capital &amp; Centric leading phases 2-3.<br><span class="badge green">More mature infrastructure</span></td>
+      </tr>
+      <tr>
+        <td><strong>Cambridge Proximity</strong></td>
+        <td>~25 miles to Cambridge centre</td>
+        <td class="winner">~7 miles to Cambridge centre<br><span class="badge green">Strong Cambridge halo effect</span></td>
+      </tr>
+      <tr>
+        <td><strong>Appreciation Outlook</strong></td>
+        <td>Moderate. Enterprise Zone and future station could boost values, but timeline uncertain. Huntingdonshire market softer currently.</td>
+        <td class="winner">Strong. Cambridge proximity, maturing Northstowe development, and established transport links drive demand. Projected 3-5% annual growth in Cambridge region.</td>
+      </tr>
+    </table>
+
+    <div class="verdict" style="border-color: var(--coral);">
+      <h3>Appreciation Winner: Longstanton</h3>
+      <p>Longstanton benefits enormously from the Cambridge halo effect. At just 7 miles from the city centre, with the Northstowe new town (10,000 homes) maturing rapidly and infrastructure already in place, demand is robust. Alconbury Weald has exciting plans including a future railway station and enterprise zone, but these are less advanced and the Huntingdonshire market has been softer recently. For medium-term capital growth, Longstanton has the edge.</p>
+    </div>
+  </div>
+</div>
+
+<!-- GARDEN & RENOVATION -->
+<div class="section" style="background: var(--light-grey); padding: 50px 0;">
+  <div class="container">
+    <div class="section-title">Garden, Renovation &amp; Running Costs</div>
+
+    <table class="comparison">
+      <tr>
+        <th>Factor</th>
+        <th style="color: #5eead4;">Alconbury Weston</th>
+        <th style="color: #fca5a5;">Longstanton</th>
+      </tr>
+      <tr>
+        <td><strong>Garden Size</strong></td>
+        <td class="winner"><strong>0.66 acres</strong> wrapping around 3 sides of the house. Mature walnut trees, expansive lawns, wildlife-friendly (no pesticides for 30 years).<br><span class="badge green">Exceptional</span></td>
+        <td><strong>Large</strong> rear garden backing onto open fields and woodland. Private and picturesque. Size not specified but appears substantial from listing photos.</td>
+      </tr>
+      <tr>
+        <td><strong>Garden Orientation</strong></td>
+        <td>Wraps around 3 sides &mdash; gets sun throughout the day from multiple angles. <span class="badge amber">Verify south-facing aspect at viewing</span></td>
+        <td>Rear garden orientation not confirmed. <span class="badge amber">Verify south-facing aspect at viewing</span></td>
+      </tr>
+      <tr>
+        <td><strong>EPC Rating</strong></td>
+        <td><strong>D</strong><br><span class="badge amber">Below average &mdash; expect higher energy bills</span></td>
+        <td class="winner"><strong>C</strong><br><span class="badge green">Decent efficiency</span></td>
+      </tr>
+      <tr>
+        <td><strong>Renovation Needs</strong></td>
+        <td><strong>Moderate-to-High</strong><br>1950s build, already rewired. May need: insulation upgrade (EPC D&rarr;C: ~&pound;5k&ndash;&pound;15k), kitchen/bathroom refresh, window upgrades, roof inspection. Estimate: <strong>&pound;20k&ndash;&pound;50k</strong> for comprehensive modernisation.</td>
+        <td class="winner"><strong>Low</strong><br>Modern build, EPC C, built-in appliances, appears well-maintained. Mainly cosmetic updates if desired. Estimate: <strong>&pound;5k&ndash;&pound;15k</strong>.</td>
+      </tr>
+      <tr>
+        <td><strong>Council Tax Band</strong></td>
+        <td><strong>Band E</strong> (Huntingdonshire)<br>Estimated ~&pound;2,890&ndash;&pound;2,950/year (2025/26)</td>
+        <td><strong>TBC</strong> (South Cambridgeshire)<br>Likely Band E/F given size. Estimated ~&pound;2,500&ndash;&pound;2,800/year (South Cambs tends slightly lower than Huntingdonshire)</td>
+      </tr>
+      <tr>
+        <td><strong>Asking Price</strong></td>
+        <td>Offers over <strong>&pound;700,000</strong></td>
+        <td class="winner">Offers over <strong>&pound;650,000</strong> (guide &pound;650k&ndash;&pound;700k)<br><span class="badge green">&pound;50k less + no chain</span></td>
+      </tr>
+      <tr>
+        <td><strong>Price Per Sq Ft</strong></td>
+        <td>Size not listed &mdash; ask agent. But 0.66 acre plot is exceptional value for the land.</td>
+        <td>&pound;293/sq ft (2,217 sq ft)</td>
+      </tr>
+      <tr>
+        <td><strong>True Cost (Price + Reno)</strong></td>
+        <td>&pound;700k + &pound;20&ndash;50k reno = <strong>&pound;720k&ndash;&pound;750k</strong></td>
+        <td class="winner">&pound;650k + &pound;5&ndash;15k = <strong>&pound;655k&ndash;&pound;665k</strong><br><span class="badge green">Up to &pound;95k less all-in</span></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- SCHOOLS -->
+<div class="section">
+  <div class="container">
+    <div class="section-title">Education: Nursery, Primary &amp; Secondary</div>
+
+    <div class="info-panels">
+      <div class="info-panel" style="border-top: 4px solid var(--teal);">
+        <h4>Alconbury Weston</h4>
+        <p style="margin-bottom: 12px;"><strong>Nursery:</strong> Village-based options and Mums &amp; Toddlers group mentioned. Nearby Alconbury Weald will have additional nursery facilities as the development grows. Huntingdon also offers several nurseries within a short drive.</p>
+        <p style="margin-bottom: 12px;"><strong>Primary Schools:</strong></p>
+        <ul>
+          <li>Alconbury CofE Primary School &mdash; <span class="badge green">Ofsted: Good</span></li>
+          <li>Ermine Street Church Academy, Little Stukeley &mdash; <span class="badge green">Ofsted: Good</span></li>
+        </ul>
+        <p style="margin-top: 12px;"><strong>Secondary Schools:</strong></p>
+        <ul>
+          <li>Hinchingbrooke School, Huntingdon (~4 miles) &mdash; well regarded</li>
+          <li>Sawtry Village Academy (~4 miles)</li>
+          <li>Alconbury Weald Church Academy Secondary (new, within development)</li>
+          <li>Kimbolton School (independent, ~12.5 miles, bus service)</li>
+        </ul>
+      </div>
+      <div class="info-panel" style="border-top: 4px solid var(--coral);">
+        <h4>Longstanton</h4>
+        <p style="margin-bottom: 12px;"><strong>Nursery:</strong> Two nurseries in the village (1 private, 1 preschool at primary school). Plus <strong>Northstowe Nursery</strong> with 80 places for ages 9 months&ndash;4 years (8am&ndash;6pm Mon&ndash;Fri). <span class="badge green">Excellent provision</span></p>
+        <p style="margin-bottom: 12px;"><strong>Primary Schools:</strong></p>
+        <ul>
+          <li>Hatton Park Primary School &mdash; good reputation</li>
+          <li>Pathfinder Church of England Primary School</li>
+          <li>Longstanton Primary (preschool attached)</li>
+        </ul>
+        <p style="margin-top: 12px;"><strong>Secondary Schools:</strong></p>
+        <ul>
+          <li>Northstowe Secondary College (age 4-19, incl. sixth form) &mdash; <span class="badge green">Ofsted: Good</span></li>
+          <li>Swavesey Village College (~3 miles)</li>
+          <li>Cambridge independent schools accessible (~7 miles)</li>
+        </ul>
+        <p style="margin-top: 12px; color: var(--teal); font-weight: 600;">All-through education from nursery to sixth form available locally.</p>
+      </div>
+    </div>
+
+    <div class="verdict" style="border-color: var(--coral); margin-top: 24px;">
+      <h3>Education Winner: Longstanton</h3>
+      <p>Both areas have solid primary options rated Good by Ofsted. However, Longstanton wins for your family's specific needs: the Northstowe Nursery is purpose-built with 80 places accepting children from 9 months (perfect for your 2-year-old right now), and Northstowe Secondary College provides all-through education from age 4 to 19 with sixth form &mdash; meaning your child could potentially attend one institution from primary through to A-levels. The proximity to Cambridge also opens up access to excellent independent schools.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SCORING -->
+<div class="score-section">
+  <div class="container">
+    <div style="text-align: center; margin-bottom: 36px;">
+      <h2 style="font-size: 1.8rem; font-weight: 700;">Overall Scoring</h2>
+      <p style="opacity: 0.7; margin-top: 6px;">Weighted by your stated priorities</p>
+    </div>
+
+    <div class="score-grid">
+      <div class="score-card">
+        <h3>Alconbury Weston</h3>
+        <div class="location">Hamerton Road, PE28</div>
+        <div class="score-number teal">67</div>
+        <div class="score-out-of">out of 100</div>
+        <div class="score-bar"><div class="score-bar-fill teal" style="width: 67%;"></div></div>
+        <div class="score-breakdown">
+          <div class="score-item"><span>Train &amp; London Access (weight: 25%)</span><span>18/25</span></div>
+          <div class="score-item"><span>Ticket Cost (weight: 10%)</span><span>5/10</span></div>
+          <div class="score-item"><span>Appreciation Potential (weight: 20%)</span><span>11/20</span></div>
+          <div class="score-item"><span>Garden Size (weight: 10%)</span><span>10/10</span></div>
+          <div class="score-item"><span>Renovation Cost (weight: 10%)</span><span>5/10</span></div>
+          <div class="score-item"><span>Council Tax (weight: 5%)</span><span>3/5</span></div>
+          <div class="score-item"><span>Education (weight: 15%)</span><span>10/15</span></div>
+          <div class="score-item"><span>South-Facing Garden (weight: 5%)</span><span>5/5</span></div>
+        </div>
+      </div>
+
+      <div class="score-card">
+        <h3>Longstanton</h3>
+        <div class="location">Mills Lane, CB24</div>
+        <div class="score-number coral">76</div>
+        <div class="score-out-of">out of 100</div>
+        <div class="score-bar"><div class="score-bar-fill coral" style="width: 76%;"></div></div>
+        <div class="score-breakdown">
+          <div class="score-item"><span>Train &amp; London Access (weight: 25%)</span><span>16/25</span></div>
+          <div class="score-item"><span>Ticket Cost (weight: 10%)</span><span>8/10</span></div>
+          <div class="score-item"><span>Appreciation Potential (weight: 20%)</span><span>17/20</span></div>
+          <div class="score-item"><span>Garden Size (weight: 10%)</span><span>7/10</span></div>
+          <div class="score-item"><span>Renovation Cost (weight: 10%)</span><span>9/10</span></div>
+          <div class="score-item"><span>Council Tax (weight: 5%)</span><span>4/5</span></div>
+          <div class="score-item"><span>Education (weight: 15%)</span><span>13/15</span></div>
+          <div class="score-item"><span>South-Facing Garden (weight: 5%)</span><span>2/5</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL VERDICT & SUGGESTIONS -->
+<div class="section">
+  <div class="container">
+    <div class="section-title">Final Verdict &amp; Recommendation</div>
+
+    <div class="verdict" style="border-color: var(--coral); border-width: 3px;">
+      <h3>Recommended: Longstanton (Mills Lane) &mdash; with a caveat</h3>
+      <p>Longstanton scores higher overall thanks to its stronger appreciation potential (Cambridge proximity), lower all-in cost (~&pound;655k vs ~&pound;735k), better energy efficiency (EPC C), excellent nursery and all-through schooling, no onward chain, and cheaper season tickets. It's a more future-proof investment in a rapidly developing area.</p>
+      <p style="margin-top: 12px;"><strong>However, the caveat is your wife's commute.</strong> Alconbury keeps her on the Thameslink line she already knows from St Neots, giving her a ~1h 25min door-to-door journey to Farringdon. From Longstanton, her commute becomes ~1h 50min with a bus-to-train-to-tube journey. Since she commutes 3 times a week, this 25-minute-each-way difference (over 150 extra minutes per week) is significant. You should discuss this trade-off carefully as a family.</p>
+      <p style="margin-top: 12px;"><strong>If your wife's commute is the dealbreaker:</strong> Alconbury is the safer choice for day-to-day quality of life. The 0.66-acre garden is genuinely exceptional, and if the planned Alconbury Weald railway station materialises, property values could see a meaningful uplift.</p>
+    </div>
+
+    <div style="margin-top: 36px;">
+      <div class="section-title">Things to Verify at Viewings</div>
+      <div class="info-panels">
+        <div class="info-panel">
+          <h4>Alconbury Weston</h4>
+          <ul>
+            <li>Confirm garden orientation (south-facing?)</li>
+            <li>Inspect roof condition (1950s build)</li>
+            <li>Check damp, insulation quality (EPC D)</li>
+            <li>Ask about the planned Alconbury Weald railway station timeline</li>
+            <li>Visit Huntingdon station to time the actual drive</li>
+            <li>Check broadband speed (rural area)</li>
+          </ul>
+        </div>
+        <div class="info-panel">
+          <h4>Longstanton</h4>
+          <ul>
+            <li>Confirm rear garden orientation (south-facing?)</li>
+            <li>Ask about council tax band (listed as "ask agent")</li>
+            <li>Test the guided busway journey to Cambridge North at peak time</li>
+            <li>Check flood risk (Cambridgeshire fen area)</li>
+            <li>Visit the Northstowe development to gauge maturity</li>
+            <li>Check broadband speed and mobile coverage</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 36px;">
+      <div class="section-title">Other Areas Worth Considering</div>
+      <div class="context-box" style="border-left-color: var(--gold);">
+        <h3>Based on your priorities, you might also explore:</h3>
+        <p style="margin-top: 10px;"><strong>Biggleswade / Sandy</strong> &mdash; On the Thameslink line between St Neots and Hitchin. Direct trains to Farringdon (~55 min) and Kings Cross. Generally more affordable than Cambridge area. Good schools and growing towns.</p>
+        <p style="margin-top: 10px;"><strong>St Ives, Cambridgeshire</strong> &mdash; Connected to Cambridge via the guided busway (like Longstanton). Has its own character as an established market town. ~15 min from Huntingdon station for Thameslink access. Could give you the best of both worlds.</p>
+        <p style="margin-top: 10px;"><strong>Godmanchester</strong> &mdash; Right next to Huntingdon station, beautiful riverside town. Direct Thameslink to Farringdon. Slightly more expensive but removes the drive-to-station problem entirely.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SOURCES -->
+<div class="section" style="background: var(--light-grey); padding: 30px 0;">
+  <div class="container">
+    <div class="section-title" style="font-size: 1rem;">Sources &amp; Data Notes</div>
+    <p style="font-size: 0.82rem; color: var(--muted); line-height: 1.8;">
+      Property data from Rightmove (March 2026). Train times from Trainline, National Rail, Thameslink Railway, and Greater Anglia. Season ticket prices from Trainline season ticket calculator. House price data from Bricks and Logic, Property Solvers, and ONS. School ratings from Ofsted. Council tax data from Huntingdonshire District Council and South Cambridgeshire District Council. Development information from Alconbury Weald official site, Northstowe official site, and Urban &amp; Civic. All figures are estimates based on publicly available data as of April 2026 and should be independently verified. Renovation cost estimates are indicative ranges only &mdash; obtain professional surveys before purchase. This report does not constitute financial advice.
+    </p>
+  </div>
+</div>
+
+<div class="footer">
+  Prepared for Mo &amp; Family &bull; April 2026 &bull; Property Comparison Report
+</div>
+
+</body>
+</html>
